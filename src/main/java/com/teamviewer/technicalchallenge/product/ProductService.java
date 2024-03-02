@@ -20,19 +20,19 @@ public class ProductService {
     }
 
 
-    public Optional<Product> getProduct(long id) {
+    public Optional<Product> getProduct(Long id) {
         return this.productRepository.findById(id);
     }
 
-    public void createProduct(Product newProduct) {
-        this.productRepository.save(newProduct);
+    public Product createProduct(Product newProduct) {
+        return this.productRepository.save(newProduct);
     }
 
-    public void updateProduct(long id, Product newProduct) {
-        this.productRepository.save(newProduct);
+    public Product updateProduct(Long id, Product newProduct) {
+        return this.productRepository.save(newProduct);
     }
 
-    public void deleteProduct(long id) {
+    public void deleteProduct(Long id) {
         this.productRepository.deleteById(id);
     }
 }

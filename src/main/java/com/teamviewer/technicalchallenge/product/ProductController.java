@@ -1,43 +1,65 @@
 package com.teamviewer.technicalchallenge.product;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.hateoas.CollectionModel;
+import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.IanaLinkRelations;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
+
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
 @RequestMapping("/api/products")
 public class ProductController {
 
-    private ProductService productService;
+    private final ProductService productService;
+    private final ProductModelAssembler assembler;
 
     @Autowired
-    ProductController(ProductService productService) {
+    ProductController(ProductService productService, ProductModelAssembler assembler) {
         this.productService = productService;
+        this.assembler = assembler;
     }
 
     @GetMapping
-    public List<Product> getAllProducts() {
-        return this.productService.getAllProducts();
+    public CollectionModel<EntityModel<Product>> getAllProducts() {
+//        List<EntityModel<Product>> products =
+//                this.productService.getAllProducts().stream()
+//                        .map(assembler::toModel)
+//                        .toList();
+//        return CollectionModel.of(products,
+//                linkTo(methodOn(ProductController.class).getAllProducts()).withSelfRel());
+        List<Product> products = this.productService.getAllProducts();
+        return assembler.toCollectionModel(products);
     }
 
     @GetMapping("/{id}")
-    public Product getProduct(@PathVariable long id) {
-        return this.productService.getProduct(id).orElseThrow();
+    public EntityModel<Product> getProduct(@PathVariable Long id) {
+        Product product = this.productService.getProduct(id).orElseThrow(() -> new ProductNotFoundException(id));
+        return assembler.toModel(product);
     }
 
     @PostMapping
-    public void createProduct(Product newProduct) {
-        this.productService.createProduct(newProduct);
+    public ResponseEntity<?> createProduct(Product newProduct) {
+        EntityModel<Product> entityModel = assembler.toModel(this.productService.createProduct(newProduct));
+        return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(entityModel);
     }
 
     @PutMapping("/{id}")
-    public void updateProduct(@PathVariable long id, Product newProduct) {
-        this.productService.updateProduct(id, newProduct);
+    public ResponseEntity<?> updateProduct(@PathVariable Long id, Product newProduct) {
+        EntityModel<Product> entityModel = assembler.toModel(this.productService.updateProduct(id, newProduct));
+        return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
+                .body(entityModel);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteMapping(@PathVariable long id) {
+    public void deleteMapping(@PathVariable Long id) {
         this.productService.deleteProduct(id);
     }
 
