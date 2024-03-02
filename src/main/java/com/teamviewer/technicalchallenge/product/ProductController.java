@@ -52,7 +52,7 @@ public class ProductController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<?> updateProduct(@PathVariable Long id, Product newProduct) {
+    public ResponseEntity<?> updateProduct(@RequestBody Product newProduct, @PathVariable Long id) {
         EntityModel<Product> entityModel = assembler.toModel(this.productService.updateProduct(id, newProduct));
         return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(entityModel);

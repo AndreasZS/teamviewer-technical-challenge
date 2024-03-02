@@ -29,6 +29,9 @@ public class ProductService {
     }
 
     public Product updateProduct(Long id, Product newProduct) {
+        Product product = this.productRepository.findById(id).orElseGet(() -> newProduct);
+        product.setId(id);
+        product.setName(newProduct.getName());
         return this.productRepository.save(newProduct);
     }
 
