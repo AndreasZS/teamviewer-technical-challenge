@@ -9,7 +9,7 @@ import java.util.Optional;
 @Service
 public class ProductService {
 
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
     @Autowired
     ProductService(ProductRepository productRepository) {
@@ -18,7 +18,6 @@ public class ProductService {
     public List<Product> getAllProducts() {
         return this.productRepository.findAll();
     }
-
 
     public Optional<Product> getProduct(Long id) {
         return this.productRepository.findById(id);
