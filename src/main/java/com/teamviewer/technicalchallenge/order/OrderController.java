@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/api/orders")
+@RequestMapping("/api")
 public class OrderController {
 
     private final OrderService orderService;
@@ -26,7 +26,7 @@ public class OrderController {
         this.assembler = assembler;
     }
 
-    @GetMapping
+    @GetMapping("/orders")
     public CollectionModel<EntityModel<Order>> getAllOrders() {
 //        List<EntityModel<Order>> orders =
 //                this.orderService.getAllOrders().stream()
@@ -38,27 +38,27 @@ public class OrderController {
         return assembler.toCollectionModel(orders);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/orders/{id}")
     public EntityModel<Order> getOrder(@PathVariable Long id) {
         Order order = this.orderService.getOrder(id).orElseThrow(() -> new OrderNotFoundException(id));
         return assembler.toModel(order);
     }
 
-    @PostMapping
+    @PostMapping("/orders")
     public ResponseEntity<EntityModel<com.teamviewer.technicalchallenge.order.Order>> createOrder(Order newOrder) {
         EntityModel<com.teamviewer.technicalchallenge.order.Order> entityModel = assembler.toModel(this.orderService.createOrder(newOrder));
         return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(entityModel);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/orders/{id}")
     public ResponseEntity<EntityModel<com.teamviewer.technicalchallenge.order.Order>> updateOrder(@RequestBody Order newOrder, @PathVariable Long id) {
         EntityModel<Order> entityModel = assembler.toModel(this.orderService.updateOrder(id, newOrder));
         return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(entityModel);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/orders/{id}")
     public void deleteMapping(@PathVariable Long id) {
         this.orderService.deleteOrder(id);
     }

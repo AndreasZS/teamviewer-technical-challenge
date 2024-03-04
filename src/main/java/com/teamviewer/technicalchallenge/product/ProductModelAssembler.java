@@ -15,7 +15,7 @@ public class ProductModelAssembler implements RepresentationModelAssembler<Produ
     public EntityModel<Product> toModel(@NonNull Product product) {
         return EntityModel.of(product,
                 linkTo(methodOn(ProductController.class).getProduct(product.getId())).withSelfRel(),
-                linkTo(methodOn(ProductController.class).getAllProducts()).withRel(""));
+                linkTo(methodOn(ProductController.class).getAllProducts()).withRel("/products"));
     }
 
     @Override

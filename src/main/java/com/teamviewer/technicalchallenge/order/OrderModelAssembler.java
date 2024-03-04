@@ -9,13 +9,14 @@ import org.springframework.stereotype.Component;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
+// TODO: pick up from adding status logic to OrderModelAssembler
 @Component
 public class OrderModelAssembler implements RepresentationModelAssembler<Order, EntityModel<Order>> {
     @Override
     public EntityModel<com.teamviewer.technicalchallenge.order.Order> toModel(@NonNull Order order) {
         return EntityModel.of(order,
                 linkTo(methodOn(OrderController.class).getOrder(order.getId())).withSelfRel(),
-                linkTo(methodOn(OrderController.class).getAllOrders()).withRel(""));
+                linkTo(methodOn(OrderController.class).getAllOrders()).withRel("/orders"));
     }
 
     @Override

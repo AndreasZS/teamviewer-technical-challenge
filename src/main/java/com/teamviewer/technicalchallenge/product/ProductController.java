@@ -12,7 +12,7 @@ import java.util.List;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/api")
 public class ProductController {
 
     private final ProductService productService;
@@ -24,7 +24,7 @@ public class ProductController {
         this.assembler = assembler;
     }
 
-    @GetMapping
+    @GetMapping("/products")
     public CollectionModel<EntityModel<Product>> getAllProducts() {
 //        List<EntityModel<Product>> products =
 //                this.productService.getAllProducts().stream()
@@ -36,27 +36,27 @@ public class ProductController {
         return assembler.toCollectionModel(products);
     }
 
-    @GetMapping("/{id}")
+    @GetMapping("/products/{id}")
     public EntityModel<Product> getProduct(@PathVariable Long id) {
         Product product = this.productService.getProduct(id).orElseThrow(() -> new ProductNotFoundException(id));
         return assembler.toModel(product);
     }
 
-    @PostMapping
+    @PostMapping("/products")
     public ResponseEntity<EntityModel<Product>> createProduct(Product newProduct) {
         EntityModel<Product> entityModel = assembler.toModel(this.productService.createProduct(newProduct));
         return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(entityModel);
     }
 
-    @PutMapping("/{id}")
+    @PutMapping("/products/{id}")
     public ResponseEntity<?> updateProduct(@RequestBody Product newProduct, @PathVariable Long id) {
         EntityModel<Product> entityModel = assembler.toModel(this.productService.updateProduct(id, newProduct));
         return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
                 .body(entityModel);
     }
 
-    @DeleteMapping("/{id}")
+    @DeleteMapping("/products/{id}")
     public void deleteMapping(@PathVariable Long id) {
         this.productService.deleteProduct(id);
     }
