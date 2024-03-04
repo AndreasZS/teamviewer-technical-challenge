@@ -1,16 +1,11 @@
 package com.teamviewer.technicalchallenge.order;
 
-import com.teamviewer.technicalchallenge.order.Order;
-import com.teamviewer.technicalchallenge.order.OrderModelAssembler;
-import com.teamviewer.technicalchallenge.order.OrderNotFoundException;
-import com.teamviewer.technicalchallenge.order.OrderService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.hateoas.CollectionModel;
-import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.IanaLinkRelations;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
+import java.net.URI;
 import java.util.List;
 
 @RestController
@@ -18,44 +13,37 @@ import java.util.List;
 public class OrderController {
 
     private final OrderService orderService;
-    private final OrderModelAssembler assembler;
 
     @Autowired
-    OrderController(OrderService orderService, OrderModelAssembler assembler) {
+    OrderController(OrderService orderService) {
         this.orderService = orderService;
-        this.assembler = assembler;
     }
 
     @GetMapping("/orders")
-    public CollectionModel<EntityModel<Order>> getAllOrders() {
-//        List<EntityModel<Order>> orders =
-//                this.orderService.getAllOrders().stream()
-//                        .map(assembler::toModel)
-//                        .toList();
-//        return CollectionModel.of(orders,
-//                linkTo(methodOn(OrderController.class).getAllOrders()).withSelfRel());
-        List<Order> orders = this.orderService.getAllOrders();
-        return assembler.toCollectionModel(orders);
+    public ResponseEntity<List<Order>> getOrders() {
+        List<Order> orders = this.orderService.getOrders();
+        return ResponseEntity.ok().body(orders);
     }
 
     @GetMapping("/orders/{id}")
-    public EntityModel<Order> getOrder(@PathVariable Long id) {
-        Order order = this.orderService.getOrder(id).orElseThrow(() -> new OrderNotFoundException(id));
-        return assembler.toModel(order);
+    public ResponseEntity<Order> getOrder(@PathVariable Long id) {
+        Order order = this.orderService.getOrder(id);
+        return ResponseEntity.ok().body(order);
     }
 
     @PostMapping("/orders")
-    public ResponseEntity<EntityModel<com.teamviewer.technicalchallenge.order.Order>> createOrder(Order newOrder) {
-        EntityModel<com.teamviewer.technicalchallenge.order.Order> entityModel = assembler.toModel(this.orderService.createOrder(newOrder));
-        return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
-                .body(entityModel);
+    public ResponseEntity<Order> createOrder(Order newOrder) {
+        Order createdOrder = this.orderService.createOrder(newOrder);
+        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
+                .buildAndExpand(createdOrder.getId())
+                .toUri();
+        return ResponseEntity.created(uri).body(createdOrder);
     }
 
     @PutMapping("/orders/{id}")
-    public ResponseEntity<EntityModel<com.teamviewer.technicalchallenge.order.Order>> updateOrder(@RequestBody Order newOrder, @PathVariable Long id) {
-        EntityModel<Order> entityModel = assembler.toModel(this.orderService.updateOrder(id, newOrder));
-        return ResponseEntity.created(entityModel.getRequiredLink(IanaLinkRelations.SELF).toUri())
-                .body(entityModel);
+    public ResponseEntity<Order> updateOrder(@RequestBody Order newOrder, @PathVariable Long id) {
+        Order updatedOrder = this.orderService.updateOrder(id, newOrder);
+        return ResponseEntity.ok().body(updatedOrder);
     }
 
     @DeleteMapping("/orders/{id}")

@@ -15,12 +15,13 @@ public class ProductService {
     ProductService(ProductRepository productRepository) {
         this.productRepository = productRepository;
     }
-    public List<Product> getAllProducts() {
+
+    public List<Product> getProducts() {
         return this.productRepository.findAll();
     }
 
-    public Optional<Product> getProduct(Long id) {
-        return this.productRepository.findById(id);
+    public Product getProduct(Long id) {
+        return this.productRepository.findById(id).orElseThrow(() -> new ProductNotFoundException(id));
     }
 
     public Product createProduct(Product newProduct) {
@@ -28,10 +29,16 @@ public class ProductService {
     }
 
     public Product updateProduct(Long id, Product newProduct) {
-        Product product = this.productRepository.findById(id).orElseGet(() -> newProduct);
-        product.setId(id);
-        product.setName(newProduct.getName());
-        return this.productRepository.save(newProduct);
+        return this.productRepository.findById(id)
+                .map(product -> {
+                    product.setId(id);
+                    product.setName(newProduct.getName());
+                    product.setDescription(newProduct.getDescription());
+                    product.setPrice(newProduct.getPrice());
+                    return this.productRepository.save(product);
+                })
+                .orElseThrow(() -> new ProductNotFoundException(id));
+
     }
 
     public void deleteProduct(Long id) {

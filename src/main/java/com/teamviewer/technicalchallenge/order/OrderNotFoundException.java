@@ -1,8 +1,10 @@
 package com.teamviewer.technicalchallenge.order;
 
-public class OrderNotFoundException extends RuntimeException {
+import com.teamviewer.technicalchallenge.exception.NotFoundException;
+
+public class OrderNotFoundException extends NotFoundException {
 
     OrderNotFoundException(Long id) {
-        super("Could not find order " + id);
+        super(Order.class, id);
     }
 }

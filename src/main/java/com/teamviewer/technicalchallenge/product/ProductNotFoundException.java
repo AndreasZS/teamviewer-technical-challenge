@@ -1,8 +1,10 @@
 package com.teamviewer.technicalchallenge.product;
 
-public class ProductNotFoundException extends RuntimeException {
+import com.teamviewer.technicalchallenge.exception.NotFoundException;
+
+public class ProductNotFoundException extends NotFoundException {
 
     ProductNotFoundException(Long id) {
-        super("Could not find product " + id);
+        super(Product.class, id);
     }
 }

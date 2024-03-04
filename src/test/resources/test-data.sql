@@ -1,0 +1,4 @@
+--INSERT INTO PRODUCT
+--VALUES (1, 'Product 1');
+--INSERT INTO PRODUCT
+--VALUES (2, 'Product 2');
