@@ -21,6 +21,7 @@ public class ProductController {
         this.productService = productService;
     }
 
+
     /**
      * Get a list of all products.
      * @return List of all products
@@ -45,7 +46,7 @@ public class ProductController {
     /**
      * Create a new product.
      * @param newProduct new Product to create
-     * @return
+     * @return ResponseEntity containing Product if it was created successfully
      */
     @PostMapping("/products")
     @ResponseStatus(HttpStatus.CREATED)
