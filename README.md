@@ -41,6 +41,9 @@ SwaggerUI: http://localhost:8080/swagger-ui/index.html
 curl -v -X POST localhost:8080/api/products -H "Content-Type: 
 application/json" -d '{"id": 1, "name": "Product 
 1", "description": "product 1 description.", "price": 1.00}'
+
+curl localhost:8080/api/orders -H 'Content-Type: application/json' -d '
+{"id": 1}'
 ## Usage
 
 ```python

@@ -32,7 +32,7 @@ public class OrderController {
     }
 
     @PostMapping("/orders")
-    public ResponseEntity<Order> createOrder(Order newOrder) {
+    public ResponseEntity<Order> createOrder(@RequestBody Order newOrder) {
         Order createdOrder = this.orderService.createOrder(newOrder);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(createdOrder.getId())

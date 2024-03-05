@@ -1,18 +1,19 @@
-package com.teamviewer.technicalchallenge.product;
+package com.teamviewer.technicalchallenge.orderitem;
 
+import com.teamviewer.technicalchallenge.product.Product;
+import com.teamviewer.technicalchallenge.product.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.springframework.test.annotation.DirtiesContext;
 
 import java.math.BigDecimal;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
-class ProductRepositoryTest {
+class OrderItemRepositoryTest {
 
     @Autowired
     private ProductRepository productRepository;

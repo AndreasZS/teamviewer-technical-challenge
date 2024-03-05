@@ -4,6 +4,7 @@ import com.teamviewer.technicalchallenge.order.Order;
 import com.teamviewer.technicalchallenge.order.Order;
 import com.teamviewer.technicalchallenge.order.Order;
 import com.teamviewer.technicalchallenge.order.OrderNotFoundException;
+import com.teamviewer.technicalchallenge.product.ExistingProductException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -28,8 +29,13 @@ public class OrderService {
     }
 
     public Order createOrder(Order newOrder) {
-        newOrder.setStatus(Status.IN_PROGRESS);
-        return this.orderRepository.save(newOrder);
+        boolean orderExists = this.orderRepository.existsById(newOrder.getId());
+        if (!orderExists) {
+            newOrder.setStatus(Status.IN_PROGRESS);
+            return this.orderRepository.save(newOrder);
+        } else {
+            throw new ExistingProductException(newOrder.getId());
+        }
     }
 
     public Order updateOrder(Long id, Order newOrder) {

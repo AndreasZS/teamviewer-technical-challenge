@@ -3,6 +3,7 @@ package com.teamviewer.technicalchallenge.orderitem;
 import com.teamviewer.technicalchallenge.orderitem.OrderItem;
 import com.teamviewer.technicalchallenge.orderitem.OrderItemNotFoundException;
 import com.teamviewer.technicalchallenge.orderitem.OrderItemRepository;
+import com.teamviewer.technicalchallenge.product.ExistingProductException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,12 @@ public class OrderItemService {
     }
 
     public OrderItem createOrderItem(OrderItem newOrderItem) {
-        return this.orderItemRepository.save(newOrderItem);
+        boolean orderItemExists = this.orderItemRepository.existsById(newOrderItem.getId());
+        if (!orderItemExists) {
+            return this.orderItemRepository.save(newOrderItem);
+        } else {
+            throw new ExistingProductException(newOrderItem.getId());
+        }
     }
 
     public OrderItem updateOrderItem(Long id, OrderItem newOrderItem) {

@@ -35,7 +35,7 @@ public class OrderItemController {
     }
 
     @PostMapping("/order-items")
-    public ResponseEntity<OrderItem> createOrderItem(OrderItem newOrderItem) {
+    public ResponseEntity<OrderItem> createOrderItem(@RequestBody OrderItem newOrderItem) {
         OrderItem createdOrderItem = this.orderItemService.createOrderItem(newOrderItem);
         URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
                 .buildAndExpand(createdOrderItem.getId())
