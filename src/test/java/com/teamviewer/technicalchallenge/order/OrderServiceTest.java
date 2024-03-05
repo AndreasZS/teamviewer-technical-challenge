@@ -1,8 +1,5 @@
 package com.teamviewer.technicalchallenge.order;
 
-import com.teamviewer.technicalchallenge.order.Order;
-import com.teamviewer.technicalchallenge.order.OrderRepository;
-import com.teamviewer.technicalchallenge.order.OrderService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;

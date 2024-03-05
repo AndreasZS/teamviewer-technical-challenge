@@ -8,7 +8,8 @@ import org.springframework.test.annotation.DirtiesContext;
 import java.math.BigDecimal;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -32,16 +33,14 @@ class ProductRepositoryTest {
 
     }
 
-    /*@Test
+    @Test
     public void testFindById() {
-        // Fails if testFindAll runs first, since the ID of the new product will actually be 3L
         // Arrange
-        this.productRepository.deleteAll();
-        Product product1 = new Product(1L, "Product 1");
+        Product product1 = new Product(1L, "Product 1", "product 1 description", BigDecimal.ONE);
         this.productRepository.saveAndFlush(product1);
         // Act
         Product product = this.productRepository.findById(1L).orElse(null);
         // Assert
         assertEquals(product1, product);
-    }*/
+    }
 }

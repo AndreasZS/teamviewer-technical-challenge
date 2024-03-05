@@ -24,7 +24,7 @@ public class ProductController {
 
     /**
      * Get a list of all products.
-     * @return List of all products
+     * @return ResponseEntity containing list of all products
      */
     @GetMapping("/products")
     public ResponseEntity<List<Product>> getProducts() {
@@ -35,7 +35,7 @@ public class ProductController {
     /**
      * Get a product by ID.
      * @param id Product ID
-     * @return
+     * @return ResponseEntity containing product
      */
     @GetMapping("/products/{id}")
     public ResponseEntity<Product> getProduct(@PathVariable Long id) {
@@ -46,7 +46,7 @@ public class ProductController {
     /**
      * Create a new product.
      * @param newProduct new Product to create
-     * @return ResponseEntity containing Product if it was created successfully
+     * @return ResponseEntity containing product if it was created successfully
      */
     @PostMapping("/products")
     @ResponseStatus(HttpStatus.CREATED)
@@ -62,7 +62,7 @@ public class ProductController {
      * Update an existing product.
      * @param newProduct new Product containing updated fields
      * @param id ID of product to update
-     * @return
+     * @return ResponseEntity containing update product
      */
     @PutMapping("/products/{id}")
     public ResponseEntity<Product> updateProduct(@RequestBody Product newProduct, @PathVariable Long id) {
@@ -71,7 +71,7 @@ public class ProductController {
     }
 
     /**
-     * Delete a product by ID
+     * Delete a product by ID.
      * @param id ID of product to delete
      */
     @DeleteMapping("/products/{id}")

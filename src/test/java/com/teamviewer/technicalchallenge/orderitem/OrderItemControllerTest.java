@@ -1,10 +1,6 @@
 package com.teamviewer.technicalchallenge.orderitem;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.teamviewer.technicalchallenge.order.Order;
-import com.teamviewer.technicalchallenge.orderitem.OrderItem;
-import com.teamviewer.technicalchallenge.orderitem.OrderItemRepository;
-import com.teamviewer.technicalchallenge.product.Product;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -16,7 +12,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;

@@ -1,6 +1,5 @@
 package com.teamviewer.technicalchallenge.orderitem;
 
-import com.teamviewer.technicalchallenge.product.ExistingProductException;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;

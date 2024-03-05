@@ -1,8 +1,5 @@
 package com.teamviewer.technicalchallenge.orderitem;
 
-import com.teamviewer.technicalchallenge.orderitem.OrderItem;
-import com.teamviewer.technicalchallenge.orderitem.OrderItemNotFoundException;
-import com.teamviewer.technicalchallenge.orderitem.OrderItemRepository;
 import com.teamviewer.technicalchallenge.product.ExistingProductException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

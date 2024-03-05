@@ -1,8 +1,5 @@
 package com.teamviewer.technicalchallenge.orderitem;
 
-import com.teamviewer.technicalchallenge.product.Product;
-import com.teamviewer.technicalchallenge.product.ProductRepository;
-import com.teamviewer.technicalchallenge.product.ProductService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -20,9 +16,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class OrderItemServiceIntegrationTest {
 
     @Autowired
-    private ProductRepository productRepository;
+    private OrderItemRepository orderItemRepository;
     @Autowired
-    private ProductService productService;
+    private OrderItemService orderItemService;
 
 
     @BeforeEach
@@ -33,75 +29,82 @@ class OrderItemServiceIntegrationTest {
     void tearDown() {
     }
 
+    OrderItem createTestOrderItem(Long id) {
+        return new OrderItem(id, 0, null, null);
+    }
+
     @Test
 //    @Sql("/data.sql") // Optional: Initialize test data using SQL scripts
-    void getProducts() {
+    void getOrderItems() {
         // Arrange
-        this.productRepository.saveAll(
-                List.of(new Product(1L, "Product 1", "product 1 description", BigDecimal.ONE),
-                new Product(2L, "Product 2", "product 2", BigDecimal.ONE))
+        this.orderItemRepository.saveAll(
+                List.of(createTestOrderItem(1L),
+                createTestOrderItem(2L))
         );
         // Act
-        List<Product> products = this.productService.getProducts();
+        List<OrderItem> orderItems = this.orderItemService.getOrderItems();
         // Assert
-        assertNotNull(products);
-        assertEquals(2, products.size());
+        assertNotNull(orderItems);
+        assertEquals(2, orderItems.size());
     }
 
     @Test
-    void getProduct() {
+    void getOrderItem() {
         // Arrange
-        Long productId = 1L;
-        this.productRepository.save(new Product(1L, "Product 1", "product 1 description", BigDecimal.ONE));
+        Long orderItemId = 1L;
+        this.orderItemRepository.save(createTestOrderItem(orderItemId));
         // Act
-        Product product = this.productService.getProduct(productId);
+        OrderItem orderItem = this.orderItemService.getOrderItem(orderItemId);
         // Assert
-        assertNotNull(product);
-        assertEquals(productId, product.getId());
+        assertNotNull(orderItem);
+        assertEquals(orderItemId, orderItem.getId());
     }
 
     @Test
-    void createProduct() {
+    void createOrderItem() {
         // Arrange
-        Product newProduct = new Product(1L, "Product 1", "product 1 description", BigDecimal.ONE);
+        OrderItem newOrderItem = createTestOrderItem(1L);
         // Act
-        Product createdProduct = this.productService.createProduct(newProduct);
+        OrderItem createdOrderItem = this.orderItemService.createOrderItem(newOrderItem);
         // Assert
-        assertNotNull(createdProduct);
-        assertNotNull(createdProduct.getId());
-        assertEquals(newProduct.getName(), createdProduct.getName());
-        Product storedProduct = this.productRepository.findById(createdProduct.getId()).orElse(null);
-        assertNotNull(createdProduct);
-        assertEquals(newProduct.getName(), storedProduct.getName());
+        assertNotNull(createdOrderItem);
+        assertNotNull(createdOrderItem.getId());
+        assertEquals(newOrderItem.getId(), createdOrderItem.getId());
+        assertEquals(newOrderItem.getQuantity(), createdOrderItem.getQuantity());
+        OrderItem storedOrderItem = this.orderItemRepository.findById(createdOrderItem.getId()).orElse(null);
+        assertNotNull(storedOrderItem);
+        assertEquals(newOrderItem.getId(), storedOrderItem.getId());
+        assertEquals(newOrderItem.getQuantity(), storedOrderItem.getQuantity());
     }
 
     @Test
-    void updateProduct() {
+    void updateOrderItem() {
         // Arrange
-        Long productId = 1L;
-        Product existingProduct = new Product(productId, "Existing Product", "existing description", BigDecimal.ONE);
-        this.productRepository.save(existingProduct);
-        Product updatedProduct = new Product(productId, "Updated Name", "Updated description",
-                BigDecimal.ONE);
+        Long orderItemId = 1L;
+        OrderItem existingOrderItem = createTestOrderItem(orderItemId);
+        this.orderItemRepository.save(existingOrderItem);
+        OrderItem updatedOrderItem = new OrderItem(orderItemId, 1, null, null);
         // Act
-        Product product = this.productService.updateProduct(productId, updatedProduct);
+        OrderItem orderItem = this.orderItemService.updateOrderItem(orderItemId, updatedOrderItem);
         // Assert
-        assertNotNull(product);
-        assertEquals(updatedProduct.getName(), product.getName());
-        Product storedProduct = this.productRepository.findById(updatedProduct.getId()).orElse(null);
-        assertNotNull(updatedProduct);
-        assertEquals(updatedProduct.getName(), storedProduct.getName());
+        assertNotNull(orderItem);
+        assertEquals(updatedOrderItem.getId(), orderItem.getId());
+        assertEquals(updatedOrderItem.getQuantity(), orderItem.getQuantity());
+        OrderItem storedOrderItem = this.orderItemRepository.findById(updatedOrderItem.getId()).orElse(null);
+        assertNotNull(storedOrderItem);
+        assertEquals(updatedOrderItem.getId(), storedOrderItem.getId());
+        assertEquals(updatedOrderItem.getQuantity(), storedOrderItem.getQuantity());
     }
 
     @Test
-    void deleteProduct() {
+    void deleteOrderItem() {
         // Arrange
-        Long productId = 1L;
-        this.productRepository.save(new Product(1L, "Product 1", "product 1 description", BigDecimal.ONE));
+        Long orderItemId = 1L;
+        this.orderItemRepository.save(createTestOrderItem(orderItemId));
         // Act
-        this.productService.deleteProduct(productId);
+        this.orderItemService.deleteOrderItem(orderItemId);
         // Assert
-        Product deletedProduct = this.productRepository.findById(productId).orElse(null);
-        assertNull(deletedProduct);
+        OrderItem deletedOrderItem = this.orderItemRepository.findById(orderItemId).orElse(null);
+        assertNull(deletedOrderItem);
     }
 }

@@ -1,8 +1,5 @@
 package com.teamviewer.technicalchallenge.orderitem;
 
-import com.teamviewer.technicalchallenge.product.Product;
-import com.teamviewer.technicalchallenge.product.ProductRepository;
-import com.teamviewer.technicalchallenge.product.ProductService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +7,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.springframework.boot.test.context.SpringBootTest;
 
-import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,10 +16,10 @@ import static org.mockito.Mockito.*;
 class OrderItemServiceTest {
 
     @Mock
-    private ProductRepository productRepository;
+    private OrderItemRepository orderItemRepository;
 
     @InjectMocks
-    private ProductService productService;
+    private OrderItemService orderItemService;
 
     @BeforeEach
     void setUp() {
@@ -33,64 +29,68 @@ class OrderItemServiceTest {
     void tearDown() {
     }
 
-    @Test
-    void getProducts() {
-        // Arrange
-        when(this.productRepository.findAll())
-                .thenReturn(List.of(new Product(1L, "Product 1", "product 1 description", BigDecimal.ONE),
-                        new Product(2L, "Product 2", "product 2", BigDecimal.ONE)));
-        // Act
-        List<Product> products = this.productService.getProducts();
-        // Assert
-        verify(this.productRepository, times(1)).findAll();
+    OrderItem createTestOrderItem(Long id) {
+        return new OrderItem(id, 0, null, null);
     }
 
     @Test
-    void getProduct() {
+    void getOrderItems() {
         // Arrange
-        Long productId = 1L;
-        when(this.productRepository.findById(productId))
-                .thenReturn(Optional.of(new Product(productId, "Product 1", "product 1 description", BigDecimal.ONE)));
+        when(this.orderItemRepository.findAll())
+                .thenReturn(List.of(createTestOrderItem(1L),
+                        createTestOrderItem(2L)));
         // Act
-        Product product = this.productService.getProduct(productId);
+        List<OrderItem> orderItems = this.orderItemService.getOrderItems();
         // Assert
-        verify(this.productRepository, times(1)).findById(productId);
+        verify(this.orderItemRepository, times(1)).findAll();
     }
 
     @Test
-    void createProduct() {
+    void getOrderItem() {
         // Arrange
-        Product newProduct = new Product(null, "Product 1", "product 1 description", BigDecimal.ONE);
-        when(this.productRepository.save(newProduct))
-                .thenReturn(new Product(1L, "Product 1", "product 1 description", BigDecimal.ONE));
+        Long orderItemId = 1L;
+        when(this.orderItemRepository.findById(orderItemId))
+                .thenReturn(Optional.of(createTestOrderItem(orderItemId)));
         // Act
-        Product createdProduct = this.productService.createProduct(newProduct);
+        OrderItem orderItem = this.orderItemService.getOrderItem(orderItemId);
         // Assert
-        verify(this.productRepository, times(1)).save(newProduct);
+        verify(this.orderItemRepository, times(1)).findById(orderItemId);
     }
 
     @Test
-    void updateProduct() {
+    void createOrderItem() {
         // Arrange
-        Long productId = 1L;
-        Product existingProduct = new Product(productId, "Existing Product", "existing description", BigDecimal.ONE);
-        when(this.productRepository.findById(productId)).thenReturn(Optional.of(existingProduct));
-        Product updatedProduct = new Product(productId, "Updated Name", "updated description", BigDecimal.TEN);
-        when(this.productRepository.save(updatedProduct)).thenReturn(updatedProduct);
+        OrderItem newOrderItem = createTestOrderItem(1L);
+        when(this.orderItemRepository.save(newOrderItem))
+                .thenReturn(createTestOrderItem(1L));
         // Act
-        Product product = this.productService.updateProduct(productId, updatedProduct);
+        OrderItem createdOrderItem = this.orderItemService.createOrderItem(newOrderItem);
         // Assert
-        verify(this.productRepository, times(1)).save(updatedProduct);
+        verify(this.orderItemRepository, times(1)).save(newOrderItem);
     }
 
     @Test
-    void deleteProduct() {
+    void updateOrderItem() {
         // Arrange
-        Long productId = 1L;
-        when(this.productRepository.existsById(productId)).thenReturn(true);
+        Long orderItemId = 1L;
+        OrderItem existingOrderItem = createTestOrderItem(orderItemId);
+        when(this.orderItemRepository.findById(orderItemId)).thenReturn(Optional.of(existingOrderItem));
+        OrderItem updatedOrderItem = new OrderItem(orderItemId, 1, null, null);
+        when(this.orderItemRepository.save(updatedOrderItem)).thenReturn(updatedOrderItem);
         // Act
-        this.productService.deleteProduct(productId);
+        OrderItem orderItem = this.orderItemService.updateOrderItem(orderItemId, updatedOrderItem);
         // Assert
-        verify(this.productRepository, times(1)).deleteById(productId);
+        verify(this.orderItemRepository, times(1)).save(updatedOrderItem);
+    }
+
+    @Test
+    void deleteOrderItem() {
+        // Arrange
+        Long orderItemId = 1L;
+        when(this.orderItemRepository.existsById(orderItemId)).thenReturn(true);
+        // Act
+        this.orderItemService.deleteOrderItem(orderItemId);
+        // Assert
+        verify(this.orderItemRepository, times(1)).deleteById(orderItemId);
     }
 }

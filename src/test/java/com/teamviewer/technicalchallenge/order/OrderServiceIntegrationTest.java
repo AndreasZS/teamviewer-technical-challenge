@@ -1,8 +1,5 @@
 package com.teamviewer.technicalchallenge.order;
 
-import com.teamviewer.technicalchallenge.order.Order;
-import com.teamviewer.technicalchallenge.order.OrderRepository;
-import com.teamviewer.technicalchallenge.order.OrderService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -10,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.annotation.DirtiesContext;
 
-import java.math.BigDecimal;
 import java.sql.Date;
 import java.time.LocalDate;
 import java.util.List;
@@ -77,7 +73,7 @@ class OrderServiceIntegrationTest {
         assertNotNull(createdOrder.getId());
         assertEquals(newOrder.getStatus(), createdOrder.getStatus());
         Order storedOrder = this.orderRepository.findById(createdOrder.getId()).orElse(null);
-        assertNotNull(createdOrder);
+        assertNotNull(storedOrder);
         assertEquals(newOrder.getStatus(), storedOrder.getStatus());
     }
 
@@ -96,7 +92,7 @@ class OrderServiceIntegrationTest {
         assertEquals(updatedOrder.getId(), order.getId());
         assertEquals(updatedOrder.getStatus(), order.getStatus());
         Order storedOrder = this.orderRepository.findById(updatedOrder.getId()).orElse(null);
-        assertNotNull(updatedOrder);
+        assertNotNull(storedOrder);
         assertEquals(updatedOrder.getStatus(), storedOrder.getStatus());
     }
 

@@ -1,23 +1,16 @@
 package com.teamviewer.technicalchallenge.product;
 
-import org.h2.util.JdbcUtils;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.mockito.InjectMocks;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.annotation.DirtiesContext;
-import org.springframework.test.context.jdbc.Sql;
 
 import java.math.BigDecimal;
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.Mockito.*;
 
 @SpringBootTest
 @DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
@@ -75,7 +68,7 @@ class ProductServiceIntegrationTest {
         assertNotNull(createdProduct.getId());
         assertEquals(newProduct.getName(), createdProduct.getName());
         Product storedProduct = this.productRepository.findById(createdProduct.getId()).orElse(null);
-        assertNotNull(createdProduct);
+        assertNotNull(storedProduct);
         assertEquals(newProduct.getName(), storedProduct.getName());
     }
 
@@ -93,7 +86,7 @@ class ProductServiceIntegrationTest {
         assertNotNull(product);
         assertEquals(updatedProduct.getName(), product.getName());
         Product storedProduct = this.productRepository.findById(updatedProduct.getId()).orElse(null);
-        assertNotNull(updatedProduct);
+        assertNotNull(storedProduct);
         assertEquals(updatedProduct.getName(), storedProduct.getName());
     }
 

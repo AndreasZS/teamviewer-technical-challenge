@@ -1,48 +1,45 @@
 package com.teamviewer.technicalchallenge.orderitem;
 
-import com.teamviewer.technicalchallenge.product.Product;
-import com.teamviewer.technicalchallenge.product.ProductRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.test.annotation.DirtiesContext;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 class OrderItemRepositoryTest {
 
     @Autowired
-    private ProductRepository productRepository;
+    private OrderItemRepository orderItemRepository;
 
     @Test
     public void testFindAll() {
         // Arrange
-        Product product1 = new Product(1L, "Product 1", "product 1 description", BigDecimal.ONE);
-        Product product2 = new Product(2L, "Product 2", "product 2", BigDecimal.ONE);
-        this.productRepository.saveAll(List.of(product1, product2));
+        OrderItem orderItem1 = new OrderItem(1L, 0, null, null);
+        OrderItem orderItem2 = new OrderItem(2L, 0, null, null);
+        this.orderItemRepository.saveAll(List.of(orderItem1, orderItem2));
         // Act
-        List<Product> products = this.productRepository.findAll();
+        List<OrderItem> orderItems = this.orderItemRepository.findAll();
         // Assert
-        assertEquals(2, products.size());
-        assertTrue(products.contains(product1));
-        assertTrue(products.contains(product2));
+        assertEquals(2, orderItems.size());
+        assertTrue(orderItems.contains(orderItem1));
+        assertTrue(orderItems.contains(orderItem2));
 
     }
 
-    /*@Test
+    @Test
     public void testFindById() {
-        // Fails if testFindAll runs first, since the ID of the new product will actually be 3L
         // Arrange
-        this.productRepository.deleteAll();
-        Product product1 = new Product(1L, "Product 1");
-        this.productRepository.saveAndFlush(product1);
+        OrderItem orderItem1 = new OrderItem(1L, 0, null, null);
+        this.orderItemRepository.saveAndFlush(orderItem1);
         // Act
-        Product product = this.productRepository.findById(1L).orElse(null);
+        OrderItem orderItem = this.orderItemRepository.findById(1L).orElse(null);
         // Assert
-        assertEquals(product1, product);
-    }*/
+        assertEquals(orderItem1, orderItem);
+    }
 }
