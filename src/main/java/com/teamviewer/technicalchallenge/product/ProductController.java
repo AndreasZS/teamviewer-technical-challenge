@@ -3,8 +3,12 @@ package com.teamviewer.technicalchallenge.product;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.server.reactive.ServerHttpRequest;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.reactive.function.client.WebClient;
+import org.springframework.web.reactive.function.server.ServerRequest;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import reactor.core.publisher.Mono;
 
 import java.net.URI;
 import java.util.List;
@@ -50,12 +54,11 @@ public class ProductController {
      */
     @PostMapping("/products")
     @ResponseStatus(HttpStatus.CREATED)
-    public ResponseEntity<Product> createProduct(@RequestBody Product newProduct) {
+    public Mono<ResponseEntity<Product>> createProduct(ServerHttpRequest serverHttpRequest,
+                                                       @RequestBody Product newProduct) {
         Product createdProduct =  this.productService.createProduct(newProduct);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}")
-                .buildAndExpand(createdProduct.getId())
-                .toUri();
-        return ResponseEntity.created(uri).body(createdProduct);
+        URI uri = serverHttpRequest.getURI().resolve("/%d".formatted(createdProduct.getId()));
+        return Mono.just(ResponseEntity.created(uri).body(createdProduct));
     }
 
     /**
@@ -65,9 +68,9 @@ public class ProductController {
      * @return ResponseEntity containing update product
      */
     @PutMapping("/products/{id}")
-    public ResponseEntity<Product> updateProduct(@RequestBody Product newProduct, @PathVariable Long id) {
+    public Mono<ResponseEntity<Product>> updateProduct(@RequestBody Product newProduct, @PathVariable Long id) {
         Product updatedProduct = this.productService.updateProduct(id, newProduct);
-        return ResponseEntity.ok().body(updatedProduct);
+        return Mono.just(ResponseEntity.ok().body(updatedProduct));
     }
 
     /**
